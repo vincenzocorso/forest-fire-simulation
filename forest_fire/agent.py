@@ -1,5 +1,4 @@
 from mesa import Agent
-from .BaseModel import BaseModel
 from .KTModel import KTModel
 from .ExtendedModel import ExtendedModel
 
