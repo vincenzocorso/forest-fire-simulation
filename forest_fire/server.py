@@ -2,8 +2,8 @@ from mesa.visualization.ModularVisualization import ModularServer
 from mesa.visualization.modules import CanvasGrid
 from .model import ForestFire
 
-width = 256
-height = 256
+width = 500
+height = 500
 
 def get_cell_color(cell):
     x, y = cell.pos
@@ -35,6 +35,6 @@ model_params = {
     "width": width,
     "height": height
 }
-canvas_element = CanvasGrid(forest_fire_portrayal, width, height, width * 5, height * 5)
+canvas_element = CanvasGrid(forest_fire_portrayal, width, height, width * 3, height * 3)
 
 server = ModularServer(ForestFire, [canvas_element], "Forest Fire", model_params)

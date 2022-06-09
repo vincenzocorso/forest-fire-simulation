@@ -1,3 +1,4 @@
+import csv
 from mesa import Model
 from mesa.time import SimultaneousActivation
 from .ConcurrentSimultaneousActivation import ConcurrentSimultaneousActivation
@@ -27,6 +28,7 @@ class ForestFire(Model):
         self.setup_cells()
         self.draw_circle(10)
 
+        self.load_rates_of_spread()
         self.max_ros = self.get_max_ros()
 
         # Define the rule to use to update the state of each cell
@@ -62,6 +64,17 @@ class ForestFire(Model):
         for (cell, x, y) in self.grid.coord_iter():
             max_ros = max(max_ros, cell.rate_of_spread)
         return max_ros
+
+    def load_rates_of_spread(self):
+        with open("data/spread_component.csv", "r") as file:
+            rates_of_spread = []
+            for line in file:
+                line = line.split(",")
+                line = [float(i) for i in line]
+                rates_of_spread.append(line)
+
+            for (cell, x, y) in self.grid.coord_iter():
+                cell.rate_of_spread = rates_of_spread[self.height - 1 - y][x]
 
     def step(self):
         """ Execute a step in the model """
