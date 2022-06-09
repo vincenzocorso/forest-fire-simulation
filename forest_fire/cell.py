@@ -1,6 +1,4 @@
 from mesa import Agent
-from .KTModel import KTModel
-from .ExtendedModel import ExtendedModel
 
 
 class ForestCell(Agent):
@@ -10,10 +8,10 @@ class ForestCell(Agent):
         self.state = 0.0
         self.next_state = None
 
-        self.fire_spread_model = ExtendedModel(model, self)
+        self.rate_of_spread = 1.0
 
     def step(self):
-        self.next_state = self.fire_spread_model.apply()
+        self.next_state = self.model.propagation_rule.apply(self)
 
     def advance(self):
         if self.state != self.next_state:

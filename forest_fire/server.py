@@ -2,8 +2,8 @@ from mesa.visualization.ModularVisualization import ModularServer
 from mesa.visualization.modules import CanvasGrid
 from .model import ForestFire
 
-width = 100
-height = 100
+width = 256
+height = 256
 
 def get_cell_color(cell):
     x, y = cell.pos
