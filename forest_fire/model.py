@@ -28,8 +28,12 @@ class ForestFire(Model):
         self.setup_cells()
         self.draw_circle(10)
 
+        # Load the rates of spread of each cell
         self.load_rates_of_spread()
         self.max_ros = self.get_max_ros()
+
+        # Load the height of each cell
+        self.load_heights()
 
         # Define the rule to use to update the state of each cell
         self.propagation_rule = ExtendedRule(self)
@@ -75,6 +79,17 @@ class ForestFire(Model):
 
             for (cell, x, y) in self.grid.coord_iter():
                 cell.rate_of_spread = rates_of_spread[self.height - 1 - y][x]
+
+    def load_heights(self):
+        with open("data/elevation.csv", "r") as file:
+            heights = []
+            for line in file:
+                line = line.split(",")
+                line = [float(i) for i in line]
+                heights.append(line)
+
+            for (cell, x, y) in self.grid.coord_iter():
+                cell.height = heights[self.height - 1 - y][x]
 
     def step(self):
         """ Execute a step in the model """

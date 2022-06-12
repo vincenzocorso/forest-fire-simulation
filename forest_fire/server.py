@@ -5,16 +5,28 @@ from .model import ForestFire
 width = 500
 height = 500
 
+is_burned = []
+with open("data/burned_mask.csv", "r") as file:
+    for line in file:
+        line = line.split(",")
+        line = [float(i) for i in line]
+        is_burned.append(line)
+
+
 def get_cell_color(cell):
     x, y = cell.pos
     if x == width // 2 and y == width // 2:
+        return "Yellow"
+    if cell.state == 1.0 and not is_burned[height - 1 - y][x]:
+        return "Purple"
+    elif cell.state == 1.0:
+        return "Black"
+    elif 0.0 < cell.state < 1.0:
+        return "Red"
+    elif is_burned[height - 1 - y][x]:
         return "Green"
     elif cell.state == 0.0:
         return "White"
-    elif cell.state == 1.0:
-        return "Black"
-    else:
-        return "Red"
 
 
 def forest_fire_portrayal(cell):

@@ -20,8 +20,10 @@ class ExtendedRule(PropagationRule):
     def __init__(self, model):
         super().__init__(model)
 
+        for (cell, _, _) in self.model.grid.coord_iter():
+            cell.update_height_factor(self.h)
+
         self.wind_factors = [[1.0 for _ in range(3)] for _ in range(3)]
-        self.height_factors = [[1.0 for _ in range(3)] for _ in range(3)]
 
         # Define some support vectors to iterate the neighbors
         self.v_adj = np.array([(0, 1), (1, 0), (0, -1), (-1, 0)])
@@ -44,7 +46,7 @@ class ExtendedRule(PropagationRule):
             x, y = cell.pos + np.array((a, b))
             if not self.model.grid.out_of_bounds((x, y)):
                 neighbor = self.model.get_cell(x, y)
-                sum += self.get_wind_factor(a, b) * self.get_height_factor(a, b) * neighbor.rate_of_spread * neighbor.state
+                sum += self.get_wind_factor(a, b) * cell.get_height_factor(a, b) * neighbor.rate_of_spread * neighbor.state
         sum /= self.model.max_ros
         return sum
 
@@ -54,16 +56,24 @@ class ExtendedRule(PropagationRule):
             x, y = cell.pos + np.array((a, b))
             if not self.model.grid.out_of_bounds((x, y)):
                 neighbor = self.model.get_cell(x, y)
-                sum += self.get_wind_factor(a, b) * self.get_height_factor(a, b) * neighbor.rate_of_spread * neighbor.state
+                sum += self.get_wind_factor(a, b) * cell.get_height_factor(a, b) * neighbor.rate_of_spread * neighbor.state
         sum *= math.pi / (4 * self.model.max_ros ** 2)
         return sum
 
     @staticmethod
-    def g(next_state):
-        return 0.0 if next_state < 1.0 else 1.0
+    def g(value):
+        return 0.0 if value < 1.0 else 1.0
+
+    @staticmethod
+    def h(value):
+        if value <= -50.0 or value >= 50.0:
+            return 0.0
+
+        if value < 0.0:
+            return 2 - ((value / 20.71) + 1)**2
+
+        return -(value / 50.0) + 1.0
 
     def get_wind_factor(self, a, b):
         return self.wind_factors[1 - b][a + 1]
 
-    def get_height_factor(self, a, b):
-        return self.height_factors[1 - b][a + 1]
