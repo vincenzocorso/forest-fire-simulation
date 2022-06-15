@@ -26,7 +26,8 @@ class ForestFire(Model):
         # The initial state is a circle of radius 10
         self.cells = [[None for _ in range(self.width)] for _ in range(self.height)]
         self.setup_cells()
-        self.draw_circle(10)
+        starting_point = (219, 282)
+        self.draw_circle(starting_point, 10)
 
         # Load the rates of spread of each cell
         self.load_rates_of_spread()
@@ -48,10 +49,11 @@ class ForestFire(Model):
             self.grid.position_agent(forest_cell, x, y)
             self.schedule.add(forest_cell)
 
-    def draw_circle(self, radius):
-        """ Draw a circle at the center of the grid """
-        for (_, x, y) in self.grid.coord_iter():
-            if (x - self.width // 2) ** 2 + (y - self.height // 2) ** 2 <= radius**2:
+    def draw_circle(self, center, radius):
+        """ Draw a circle at the given center """
+        x0, y0 = center
+        for (cell, x, y) in self.grid.coord_iter():
+            if (x - x0)**2 + (y - y0)**2 <= radius**2:
                 self.get_cell(x, y).state = 1.0
 
     def get_cell(self, x, y):
