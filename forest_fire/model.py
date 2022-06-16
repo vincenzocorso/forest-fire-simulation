@@ -26,8 +26,8 @@ class ForestFire(Model):
         # The initial state is a circle of radius 10
         self.cells = [[None for _ in range(self.width)] for _ in range(self.height)]
         self.setup_cells()
-        starting_point = (219, 282)
-        self.draw_circle(starting_point, 10)
+        starting_point = (141, 141)
+        self.draw_circle(starting_point, 5)
 
         # Load the rates of spread of each cell
         self.load_rates_of_spread()

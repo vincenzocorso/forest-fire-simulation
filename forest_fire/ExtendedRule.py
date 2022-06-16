@@ -30,7 +30,14 @@ class ExtendedRule(PropagationRule):
         self.v_diag = np.array([(-1, 1), (1, 1), (1, -1), (-1, -1)])
 
     def apply(self, cell):
-        if cell.state == 1.0 or cell.rate_of_spread == 0.0:
+        not_burning_neighbour = True
+        for (a, b) in self.v_adj+self.v_diag:
+            x, y = cell.pos + np.array((a, b))
+            if not self.model.grid.out_of_bounds((x, y)):
+                neighbor = self.model.get_cell(x, y)
+                if neighbor.state == 1.0:
+                    not_burning_neighbour = False
+        if cell.state == 1.0 or cell.rate_of_spread == 0.0 or not_burning_neighbour:
             return cell.state
 
         next_state = (cell.rate_of_spread / self.model.max_ros) * cell.state

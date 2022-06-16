@@ -2,8 +2,8 @@ from mesa.visualization.ModularVisualization import ModularServer
 from mesa.visualization.modules import CanvasGrid
 from .model import ForestFire
 
-width = 500
-height = 500
+width = 250
+height = 250
 
 is_burned = []
 with open("data/burned_mask.csv", "r") as file:
