@@ -72,7 +72,7 @@ class ForestFire(Model):
         return max_ros
 
     def load_rates_of_spread(self):
-        with open("data/spread_component.csv", "r") as file:
+        with open("data/woolsey_new/spread_component.csv", "r") as file:
             rates_of_spread = []
             for line in file:
                 line = line.split(",")
@@ -83,7 +83,7 @@ class ForestFire(Model):
                 cell.rate_of_spread = rates_of_spread[self.height - 1 - y][x]
 
     def load_heights(self):
-        with open("data/elevation.csv", "r") as file:
+        with open("data/woolsey_new/elevation.csv", "r") as file:
             heights = []
             for line in file:
                 line = line.split(",")
