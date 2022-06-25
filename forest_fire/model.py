@@ -16,6 +16,7 @@ class ForestFire(Model):
 
         # Define how the agents' behaviour will be scheduled
         self.schedule = SimultaneousActivation(self)
+        self.wind = []
 
         # Define the type of space
         self.width = width
@@ -26,8 +27,19 @@ class ForestFire(Model):
         # The initial state is a circle of radius 10
         self.cells = [[None for _ in range(self.width)] for _ in range(self.height)]
         self.setup_cells()
-        starting_point = (141, 141)
-        self.draw_circle(starting_point, 5)
+        #hopkins fire
+        starting_point = (105, 170)
+        self.draw_circle(starting_point, 1)
+        #doe fire
+        starting_point2 = (160, 102)
+        self.draw_circle(starting_point2, 5)
+        #hulls grave
+        starting_point3 = (130, 70)
+        self.draw_circle(starting_point3, 1)
+        #hulls grave
+        starting_point4 = (140, 130)
+        self.draw_circle(starting_point4, 2)
+
 
         # Load the rates of spread of each cell
         self.load_rates_of_spread()
@@ -35,6 +47,8 @@ class ForestFire(Model):
 
         # Load the height of each cell
         self.load_heights()
+        self.load_wind()
+        self.load_rain(1)
 
         # Define the rule to use to update the state of each cell
         self.propagation_rule = ExtendedRule(self)
@@ -72,7 +86,7 @@ class ForestFire(Model):
         return max_ros
 
     def load_rates_of_spread(self):
-        with open("data/woolsey_new/spread_component.csv", "r") as file:
+        with open("data/august250/spread_component.csv", "r") as file:
             rates_of_spread = []
             for line in file:
                 line = line.split(",")
@@ -83,7 +97,7 @@ class ForestFire(Model):
                 cell.rate_of_spread = rates_of_spread[self.height - 1 - y][x]
 
     def load_heights(self):
-        with open("data/woolsey_new/elevation.csv", "r") as file:
+        with open("data/august250/elevation.csv", "r") as file:
             heights = []
             for line in file:
                 line = line.split(",")
@@ -93,7 +107,27 @@ class ForestFire(Model):
             for (cell, x, y) in self.grid.coord_iter():
                 cell.height = heights[self.height - 1 - y][x]
 
+    def load_wind(self):
+        with open("data/august250/wind.csv", "r") as file:
+            for line in file:
+                line = line.split(",")
+                line = [float(i) for i in line]
+                self.wind.append(line)
+
+    def load_rain(self, day):
+
+        with open("data/august250/rain/rain"+str(int(day))+".csv" , "r") as file:
+            rain = []
+            for line in file:
+                line = line.split(",")
+                line = [float(i) for i in line]
+                rain.append(line)
+
+            for (cell, x, y) in self.grid.coord_iter():
+                cell.rain = rain[self.height - 1 - y][x] / 12
+
     def step(self):
         """ Execute a step in the model """
+        if self.schedule.steps % 5 == 0:
+            self.load_rain(self.schedule.steps/5 + 16)
         self.schedule.step()
-

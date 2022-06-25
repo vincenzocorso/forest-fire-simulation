@@ -6,7 +6,7 @@ width = 250
 height = 250
 
 is_burned = []
-with open("data/woolsey_new/burned_mask.csv", "r") as file:
+with open("data/august250/burned_mask.csv", "r") as file:
     for line in file:
         line = line.split(",")
         line = [float(i) for i in line]
@@ -21,12 +21,13 @@ def get_cell_color(cell):
          return "Purple"
     elif cell.state == 1.0:
         return "Black"
-    elif 0.5 < cell.state < 1.0:
-        return "Red"
+    #elif 0 < cell.state < 1.0:
+    #    return "Red"
     elif is_burned[height - 1 - y][x]:
          return "Green"
-    elif cell.state == 0.0:
+    else:
         return "White"
+    
 
 
 def forest_fire_portrayal(cell):
