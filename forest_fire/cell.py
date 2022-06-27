@@ -7,6 +7,7 @@ class ForestCell(Agent):
         super().__init__(pos, model)
 
         self.state = 0.0
+        self.is_burned = 0
         self.next_state = None
         self.wind_component = 1
         self.rate_of_spread = 1.0  # meters per second

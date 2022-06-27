@@ -41,7 +41,8 @@ class BaseRule(PropagationRule):
         for (a, b) in self.v_adj:
             x, y = cell.pos + np.array((a, b))
             if not self.model.grid.out_of_bounds((x, y)):
-                sum += self.get_wind_factor(a, b) * self.get_height_factor(a, b) * self.model.get_cell(x, y).state
+                neighbor = self.model.get_cell(x, y)
+                sum += self.get_wind_factor(a, b) * self.get_height_factor(a, b) * neighbor.state
         return sum
 
     def calculate_diag_term(self, cell):
@@ -49,7 +50,8 @@ class BaseRule(PropagationRule):
         for (a, b) in self.v_diag:
             x, y = cell.pos + np.array((a, b))
             if not self.model.grid.out_of_bounds((x, y)):
-                sum += self.get_wind_factor(a, b) * self.get_height_factor(a, b) * self.model.get_cell(x, y).state
+                neighbor = self.model.get_cell(x, y)
+                sum += self.get_wind_factor(a, b) * self.get_height_factor(a, b) * neighbor.state
         sum *= 0.83
         return sum
 
