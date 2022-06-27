@@ -111,7 +111,7 @@ class OurRule(PropagationRule):
     @staticmethod
     def slope_h2(value, a, b):
         value = -value
-        alpha = 62.5
+        alpha = 30.0
         beta = 1.0
         #horizontal
         if a != 0 and b == 0:
@@ -154,7 +154,7 @@ class OurRule(PropagationRule):
 
     def compute_wind_factor(self,cell):
         gust_prob = 0.1
-        c1 = 0.75
+        c1 = 0.25
         c2 = 0.75
         wind_angle = self.model.wind[16 + (self.model.schedule.steps // 5) ][2]
         if random.random() < gust_prob:

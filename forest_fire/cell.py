@@ -12,7 +12,7 @@ class ForestCell(Agent):
         self.wind_component = 1
         self.rate_of_spread = 1.0  # meters per second
         self.height = 0.0  # meters
-        self.rain = 0
+        self.rain = 0   # mm per hour
         self.rain_deficit = 0
         self.height_factors = [[1.0 for _ in range(3)] for _ in range(3)]
 

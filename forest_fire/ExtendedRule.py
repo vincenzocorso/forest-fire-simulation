@@ -105,7 +105,7 @@ class ExtendedRule(PropagationRule):
     @staticmethod
     def slope_h2(value, a, b):
         value = -value
-        alpha = 62.5
+        alpha = 100
         beta = 1.0
         if a != 0 and b == 0:  # horizontal
             length = 656
@@ -120,8 +120,8 @@ class ExtendedRule(PropagationRule):
 
     def compute_wind_factor(self, cell):
         gust_prob = 0.1
-        c1 = 0.75
-        c2 = 0.75
+        c1 = 0.045
+        c2 = 0.131
 
         wind_angle = self.model.wind[16 + (self.model.schedule.steps // 5)][2]
         if random.random() < gust_prob:
