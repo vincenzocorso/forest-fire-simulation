@@ -39,7 +39,7 @@ class SlopeFunctions:
     @staticmethod
     def slope_h2(value, a, b):
         value = -value
-        alpha = 62.5
+        alpha = 30.0
         beta = 1.0
         if a != 0 and b == 0:  # horizontal
             length = 656

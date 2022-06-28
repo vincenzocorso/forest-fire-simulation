@@ -16,7 +16,7 @@ class WindFactorCalculator:
     def compute_wind_factor(model, cell):
         """ Compute the wind factors """
         gust_prob = 0.1  # The probability of gust of wind
-        c1 = 0.75
+        c1 = 0.25
         c2 = 0.75
 
         wind_angle = model.wind[16 + (model.schedule.steps // 5)][2]
