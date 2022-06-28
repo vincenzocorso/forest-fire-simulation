@@ -1,6 +1,6 @@
 from mesa.visualization.ModularVisualization import ModularServer
 from mesa.visualization.modules import CanvasGrid
-from .model import ForestFire
+from .ForestFire import ForestFire
 
 # Define the width and the height of the map
 width = 250
@@ -8,9 +8,7 @@ height = 250
 
 
 def get_cell_color(cell):
-    """
-        This method return the color of the cell
-    """
+    """ This method return the color of the cell """
     x, y = cell.pos
     if x == width // 2 and y == width // 2:  # Color the center of the map
         return "Yellow"
@@ -25,9 +23,7 @@ def get_cell_color(cell):
 
 
 def forest_fire_portrayal(cell):
-    """
-        This method return the style of the cell
-    """
+    """ This method return the style of the cell """
     (x, y) = cell.pos
     portrayal = {
         "Shape": "rect",

@@ -1,11 +1,13 @@
 import os.path
 
+
 class DataLoader:
+    """ Load scenarios data from csv file """
     def __init__(self, model):
         self.model = model
 
     def load_starting_points(self):
-        with open("data/" + self.model.wildfire_name + "/starting_points.csv", "r") as file:
+        with open("data/{}/starting_points.csv".format(self.model.wildfire_name), "r") as file:
             for line in file:
                 line = line.split(",")
                 starting_point = (float(line[0]), float(line[1]))
@@ -16,8 +18,8 @@ class DataLoader:
         print("All starting points have been loaded")
 
     def load_burned_map(self):
-        if os.path.exists("data/" + self.model.wildfire_name + "/burned_mask.csv"):
-            with open("data/" + self.model.wildfire_name + "/burned_mask.csv", "r") as file:
+        if os.path.exists("data/{}/burned_mask.csv".format(self.model.wildfire_name)):
+            with open("data/{}/burned_mask.csv".format(self.model.wildfire_name), "r") as file:
                 is_burned = []
                 for line in file:
                     line = line.split(",")
@@ -29,7 +31,7 @@ class DataLoader:
             print("The burned map has been loaded")
 
     def load_rates_of_spread(self):
-        with open("data/" + self.model.wildfire_name + "/spread_component.csv", "r") as file:
+        with open("data/{}/spread_component.csv".format(self.model.wildfire_name), "r") as file:
             rates_of_spread = []
             for line in file:
                 line = line.split(",")
@@ -41,7 +43,7 @@ class DataLoader:
         print("The rates of spread have been loaded")
 
     def load_heights(self):
-        with open("data/" + self.model.wildfire_name + "/elevation.csv", "r") as file:
+        with open("data/{}/elevation.csv".format(self.model.wildfire_name), "r") as file:
             heights = []
             for line in file:
                 line = line.split(",")
@@ -53,7 +55,7 @@ class DataLoader:
         print("The elevation map has been loaded")
 
     def load_wind(self):
-        with open("data/" + self.model.wildfire_name + "/wind.csv", "r") as file:
+        with open("data/{}/wind.csv".format(self.model.wildfire_name), "r") as file:
             for line in file:
                 line = line.split(",")
                 line = [float(i) for i in line]
