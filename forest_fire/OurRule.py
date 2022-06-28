@@ -154,8 +154,8 @@ class OurRule(PropagationRule):
 
     def compute_wind_factor(self,cell):
         gust_prob = 0.1
-        c1 = 0.25
-        c2 = 0.75
+        c1 = 0.1
+        c2 = 1.25
         wind_angle = self.model.wind[16 + (self.model.schedule.steps // 5) ][2]
         if random.random() < gust_prob:
             wind_speed = self.model.wind[16 + (self.model.schedule.steps // 5) ][0] / 3.6
