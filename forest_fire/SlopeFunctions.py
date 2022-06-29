@@ -49,5 +49,5 @@ class SlopeFunctions:
             length = 1044
 
         length *= beta
-        O = math.atan(value / length)
-        return math.exp(alpha * O)
+        theta = math.atan(value / length)
+        return math.exp(alpha * theta)

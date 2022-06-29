@@ -1,3 +1,4 @@
+import math
 from mesa import Model
 from mesa.time import SimultaneousActivation
 from mesa.space import SingleGrid
@@ -11,10 +12,10 @@ from .OurRule import OurRule
 class ForestFire(Model):
     """ Define the Forest Fire Model and its parameters"""
 
-    def __init__(self, width, height):
+    def __init__(self, width, height, propagation_rule, scenario):
         """ Initialize the model """
 
-        self.wildfire_name = "august250"
+        self.wildfire_name = scenario
 
         # Define how the agents' behaviour will be scheduled
         self.schedule = SimultaneousActivation(self)
@@ -37,14 +38,35 @@ class ForestFire(Model):
         self.data_loader.load_rates_of_spread()  # Load the rates of spread of each cell
         self.data_loader.load_heights()  # Load the height of each cell
         self.data_loader.load_wind()  # Load the wind data
-        self.data_loader.load_rain(1)  # Load the rain data
 
         self.max_ros = self.get_max_ros()
+        print("The maximum rate of spread is {} m/s".format(self.max_ros))
+
+        self.cell_length = 734  # Length of a cell in meters
+        print("The cell length is {} m".format(self.cell_length))
+
+        self.seconds_per_step = self.cell_length // self.max_ros
+        print("In the simulation 1 step is equivalent to {} seconds".format(self.seconds_per_step))
+
+        self.seconds_per_day = 86400
+        self.steps_per_day = math.ceil(self.seconds_per_day / self.seconds_per_step)
+        print("In the simulation 1 day is equivalent to {} steps".format(self.steps_per_day))
 
         # Define the rule to use to update the state of each cell
-        self.propagation_rule = OurRule(self)
+        self.propagation_rule = self.get_propagation_rule(propagation_rule)
 
         self.running = True
+
+    def get_propagation_rule(self, propagation_rule):
+        """ Return the propagation rule object """
+        if propagation_rule == "BaseRule":
+            return BaseRule(self)
+        elif propagation_rule == "ExtendedRule":
+            return ExtendedRule(self)
+        elif propagation_rule == "OurRule":
+            return OurRule(self)
+        else:
+            raise RuntimeError("Rule not found")
 
     def setup_cells(self):
         """ Setup the grid """
@@ -76,10 +98,13 @@ class ForestFire(Model):
             max_ros = max(max_ros, cell.rate_of_spread)
         return max_ros
 
+    def get_days_elapsed(self):
+        return self.schedule.steps // self.steps_per_day
+
     def step(self):
         """ Execute a step in the model """
-        # Load the rain of the day
-        if self.schedule.steps % 5 == 0:
-            self.data_loader.load_rain(self.schedule.steps // 5 + 16)
+        # Load the daily rain
+        if self.schedule.steps % self.steps_per_day == 0:
+            self.data_loader.load_rain(16 + self.get_days_elapsed())
 
         self.schedule.step()

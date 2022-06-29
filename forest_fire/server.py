@@ -1,11 +1,14 @@
+import os
 from mesa.visualization.ModularVisualization import ModularServer
 from mesa.visualization.modules import CanvasGrid
+from mesa.visualization.UserParam import UserSettableParameter
 from .ForestFire import ForestFire
 
 # Define the width and the height of the map
 width = 250
 height = 250
 
+scenarios = [item for item in os.listdir("./data") if os.path.isdir(os.path.join("./data", item))]
 
 def get_cell_color(cell):
     """ This method return the color of the cell """
@@ -41,7 +44,9 @@ def forest_fire_portrayal(cell):
 # Create a canvas grid
 model_params = {
     "width": width,
-    "height": height
+    "height": height,
+    "propagation_rule": UserSettableParameter("choice", "PropagationRule", value="OurRule", choices=["OurRule", "BaseRule", "ExtendedRule"]),
+    "scenario": UserSettableParameter("choice", "Scenario", value=scenarios[0], choices=scenarios)
 }
 canvas_element = CanvasGrid(forest_fire_portrayal, width, height, width * 3, height * 3)
 
