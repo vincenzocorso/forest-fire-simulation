@@ -15,21 +15,24 @@ class WindFactorCalculator:
     @staticmethod
     def compute_wind_factor(model, cell, tmp1, tmp2):
         """ Compute the wind factors """
-        gust_prob = 0.1  # The probability of gust of wind
-        c1 = tmp1
-        c2 = tmp2
+        gust_prob = 0.1  # The probability of a gust of wind
+        c1 = 0.25
+        c2 = 0.75
 
-        wind_angle = model.wind[16 + (model.schedule.steps // 5)][2]
+        days_elapsed = model.get_days_elapsed()
         if random.random() < gust_prob:
-            wind_speed = model.wind[16 + (model.schedule.steps // 5)][0] / 3.6
+            wind_speed = model.wind[model.starting_day + days_elapsed][0] / 3.6  # there is a gust of wind
         else:
-            wind_speed = model.wind[16 + (model.schedule.steps // 5)][1] / 3.6
+            wind_speed = model.wind[model.starting_day + days_elapsed][1] / 3.6
+
         fire_angle = WindFactorCalculator.get_fire_direction(model, cell)
         if fire_angle == -1:
             return 0
+        wind_angle = model.wind[model.starting_day + days_elapsed][2]
         angle_difference = abs(wind_angle - fire_angle) % 360
         if angle_difference > 180:
             angle_difference = 360 - angle_difference
+
         ft = math.exp(wind_speed * c2 * (math.cos(math.radians(angle_difference)) - 1))
         return math.exp(c1 * wind_speed) * ft
 
@@ -37,6 +40,7 @@ class WindFactorCalculator:
     def get_fire_direction(model, cell):
         sum_ang = 0
         sum_states = 0
+
         for index, (a, b) in enumerate(v_adj):
             x, y = cell.pos + np.array((a, b))
             if not model.grid.out_of_bounds((x, y)):
@@ -52,6 +56,7 @@ class WindFactorCalculator:
                 ang = ang_diag[index]
                 sum_ang += ang * neighbor.state
                 sum_states += neighbor.state
+
         if sum_states == 0:
             return -1
         return sum_ang / sum_states

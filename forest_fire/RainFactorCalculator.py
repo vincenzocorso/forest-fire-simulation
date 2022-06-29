@@ -26,4 +26,4 @@ class RainFactorCalculator:
 
     @staticmethod
     def rain_sc_reduction(cell):
-        return 1 - max(min(0.8, 0.012 * cell.rain), 0)
+        return max(min(0.8, 0.012 * cell.rain), 0)

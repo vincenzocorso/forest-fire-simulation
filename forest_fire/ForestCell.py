@@ -4,6 +4,7 @@ from mesa import Agent
 
 class ForestCell(Agent):
     """ A cell of the grid representing a forest area """
+
     def __init__(self, pos, model):
         super().__init__(pos, model)
 
