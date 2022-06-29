@@ -11,10 +11,13 @@ from .OurRule import OurRule
 class ForestFire(Model):
     """ Define the Forest Fire Model and its parameters"""
 
-    def __init__(self, width, height):
+    def __init__(self, width, height, alpha, c1, c2):
         """ Initialize the model """
 
         self.wildfire_name = "august250"
+        self.alpha = alpha
+        self.c1 = c1
+        self.c2 = c2
 
         # Define how the agents' behaviour will be scheduled
         self.schedule = SimultaneousActivation(self)
@@ -43,7 +46,7 @@ class ForestFire(Model):
 
         # Define the rule to use to update the state of each cell
         self.propagation_rule = OurRule(self)
-
+        
         self.running = True
 
     def setup_cells(self):
@@ -83,3 +86,27 @@ class ForestFire(Model):
             self.data_loader.load_rain(self.schedule.steps // 5 + 16)
 
         self.schedule.step()
+
+        return self.compute_metric()
+
+    def compute_metric(self):
+        tp = 0
+        tn = 0
+        fp = 0
+        fn = 0
+        for i in range(250):
+            for j in range (250):
+                cell = self.get_cell(i,j)
+                if cell.is_burned and cell.state == 1:
+                    tp += 1
+                elif cell.is_burned and cell.state != 1:
+                    fn += 1
+                elif not cell.is_burned and cell.state == 1:
+                    fp += 1
+                elif not cell.is_burned and cell.state != 1:
+                    tn += 1
+
+        precision = tp / (tp + fp)
+        recall = tp / (tp + fn)
+        f1 = 2 * 1/(1/precision + 1/recall)
+        return f1, precision, recall

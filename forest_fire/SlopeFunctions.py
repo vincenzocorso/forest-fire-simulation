@@ -37,9 +37,9 @@ class SlopeFunctions:
         return -2 / (1.39626 - math.pi / 4) * (slope - math.pi / 4) + 2
 
     @staticmethod
-    def slope_h2(value, a, b):
+    def slope_h2(value, a, b, tmp):
         value = -value
-        alpha = 30.0
+        alpha = tmp
         beta = 1.0
         if a != 0 and b == 0:  # horizontal
             length = 656

@@ -40,4 +40,4 @@ class ForestCell(Agent):
         """ Update the height factor matrix using the given slope function """
         for neighbor in self.model.grid.iter_neighbors(self.pos, moore=True):
             a, b = np.array(neighbor.pos) - self.pos
-            self.height_factors[1 - b][a + 1] = phi(self.height - neighbor.height, a, b)
+            self.height_factors[1 - b][a + 1] = phi(self.height - neighbor.height, a, b, self.model.alpha)

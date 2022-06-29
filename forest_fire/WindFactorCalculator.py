@@ -13,11 +13,11 @@ ang_diag = np.array([135, 225, 315, 45])
 
 class WindFactorCalculator:
     @staticmethod
-    def compute_wind_factor(model, cell):
+    def compute_wind_factor(model, cell, tmp1, tmp2):
         """ Compute the wind factors """
         gust_prob = 0.1  # The probability of gust of wind
-        c1 = 0.25
-        c2 = 0.75
+        c1 = tmp1
+        c2 = tmp2
 
         wind_angle = model.wind[16 + (model.schedule.steps // 5)][2]
         if random.random() < gust_prob:
