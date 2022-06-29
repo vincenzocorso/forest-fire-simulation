@@ -71,5 +71,9 @@ class DataLoader:
                 rain.append(line)
 
             for (cell, x, y) in self.model.grid.coord_iter():
-                cell.rain = rain[self.model.height - 1 - y][x] / 12
+                cell.rain = rain[self.model.height - 1 - y][x]
         print("The rain data at day {} has been loaded".format(day))
+
+    def load_starting_day(self):
+        with open("data/{}/starting_day.csv".format(self.model.wildfire_name), "r") as file:
+            self.model.starting_day = int(file.read())

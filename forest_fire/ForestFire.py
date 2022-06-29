@@ -16,6 +16,7 @@ class ForestFire(Model):
         """ Initialize the model """
 
         self.wildfire_name = scenario
+        self.starting_day = 0
 
         # Define how the agents' behaviour will be scheduled
         self.schedule = SimultaneousActivation(self)
@@ -38,6 +39,9 @@ class ForestFire(Model):
         self.data_loader.load_rates_of_spread()  # Load the rates of spread of each cell
         self.data_loader.load_heights()  # Load the height of each cell
         self.data_loader.load_wind()  # Load the wind data
+        self.data_loader.load_starting_day()  # Load the starting day
+
+        print("The starting day is {}".format(self.starting_day))
 
         self.max_ros = self.get_max_ros()
         print("The maximum rate of spread is {} m/s".format(self.max_ros))
@@ -105,6 +109,6 @@ class ForestFire(Model):
         """ Execute a step in the model """
         # Load the daily rain
         if self.schedule.steps % self.steps_per_day == 0:
-            self.data_loader.load_rain(16 + self.get_days_elapsed())
+            self.data_loader.load_rain(self.starting_day + self.get_days_elapsed())
 
         self.schedule.step()

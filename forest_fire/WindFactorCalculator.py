@@ -21,14 +21,14 @@ class WindFactorCalculator:
 
         days_elapsed = model.get_days_elapsed()
         if random.random() < gust_prob:
-            wind_speed = model.wind[16 + days_elapsed][0] / 3.6  # there is a gust of wind
+            wind_speed = model.wind[model.starting_day + days_elapsed][0] / 3.6  # there is a gust of wind
         else:
-            wind_speed = model.wind[16 + days_elapsed][1] / 3.6
+            wind_speed = model.wind[model.starting_day + days_elapsed][1] / 3.6
 
         fire_angle = WindFactorCalculator.get_fire_direction(model, cell)
         if fire_angle == -1:
             return 0
-        wind_angle = model.wind[16 + days_elapsed][2]
+        wind_angle = model.wind[model.starting_day + days_elapsed][2]
         angle_difference = abs(wind_angle - fire_angle) % 360
         if angle_difference > 180:
             angle_difference = 360 - angle_difference

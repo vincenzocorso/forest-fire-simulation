@@ -19,6 +19,8 @@ def get_cell_color(cell):
         return "Purple"
     elif cell.state == 1.0:  # Color the cells correctly burned
         return "Black"
+    elif 0.0 < cell.state < 1.0:
+        return "Red"
     elif cell.is_burned:  # Color the cells burned during the wildfire, but not in the simulation
         return "Green"
     else:  # The default color is white
