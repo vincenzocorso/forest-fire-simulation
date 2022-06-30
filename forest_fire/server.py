@@ -10,6 +10,7 @@ height = 250
 
 scenarios = [item for item in os.listdir("./data") if os.path.isdir(os.path.join("./data", item))]
 
+
 def get_cell_color(cell):
     """ This method return the color of the cell """
     x, y = cell.pos
@@ -19,7 +20,7 @@ def get_cell_color(cell):
         return "Purple"
     elif cell.state == 1.0:  # Color the cells correctly burned
         return "Black"
-    elif 0.0 < cell.state < 1.0:
+    elif cell.model.show_partial_burned_cells and 0.0 < cell.state < 1.0:
         return "Red"
     elif cell.is_burned:  # Color the cells burned during the wildfire, but not in the simulation
         return "Green"
@@ -48,7 +49,8 @@ model_params = {
     "width": width,
     "height": height,
     "propagation_rule": UserSettableParameter("choice", "PropagationRule", value="OurRule", choices=["OurRule", "BaseRule", "ExtendedRule"]),
-    "scenario": UserSettableParameter("choice", "Scenario", value=scenarios[0], choices=scenarios)
+    "scenario": UserSettableParameter("choice", "Scenario", value=scenarios[0], choices=scenarios),
+    "show_partial_burned_cells": UserSettableParameter("checkbox", 'Show partial burned cells', value=False)
 }
 canvas_element = CanvasGrid(forest_fire_portrayal, width, height, width * 3, height * 3)
 

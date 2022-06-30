@@ -38,9 +38,10 @@ class SlopeFunctions:
 
     @staticmethod
     def slope_h2(value, a, b):
+        """ This function it's defined in Alexandridis. It's used in OurModel """
         value = -value
-        alpha = 30.0
-        beta = 1.0
+        delta = 45.0
+
         if a != 0 and b == 0:  # horizontal
             length = 656
         elif a == 0 and b != 0:  # vertical
@@ -48,6 +49,5 @@ class SlopeFunctions:
         else:  # diagonal
             length = 1044
 
-        length *= beta
         theta = math.atan(value / length)
-        return math.exp(alpha * theta)
+        return math.exp(delta * theta)

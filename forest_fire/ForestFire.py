@@ -12,11 +12,13 @@ from .OurRule import OurRule
 class ForestFire(Model):
     """ Define the Forest Fire Model and its parameters"""
 
-    def __init__(self, width, height, propagation_rule, scenario):
+    def __init__(self, width, height, propagation_rule, scenario, show_partial_burned_cells):
         """ Initialize the model """
 
         self.wildfire_name = scenario
         self.starting_day = 0
+
+        self.show_partial_burned_cells = show_partial_burned_cells
 
         # Define how the agents' behaviour will be scheduled
         self.schedule = SimultaneousActivation(self)
@@ -112,3 +114,22 @@ class ForestFire(Model):
             self.data_loader.load_rain(self.starting_day + self.get_days_elapsed())
 
         self.schedule.step()
+
+        self.print_metrics()
+
+    def print_metrics(self):
+        true_positive, false_positive, false_negative = 0, 0, 0
+        for (cell, _, _) in self.grid.coord_iter():
+            if cell.state == 1.0 and cell.is_burned:
+                true_positive += 1
+            elif cell.state == 1.0 and not cell.is_burned:
+                false_positive += 1
+            elif cell.state == 0.0 and cell.is_burned:
+                false_negative += 1
+
+        precision = true_positive / (true_positive + false_positive)
+        recall = true_positive / (true_positive + false_negative)
+        f1_score = 2 / ((1 / precision) + (1 / recall))
+
+        print("Metrics at step {}".format(self.schedule.steps))
+        print("Precision: {} | Recall: {} | F1-Score: {}".format(precision, recall, f1_score))

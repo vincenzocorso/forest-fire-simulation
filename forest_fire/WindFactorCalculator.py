@@ -17,7 +17,7 @@ class WindFactorCalculator:
         """ Compute the wind factors """
         gust_prob = 0.1  # The probability of a gust of wind
         c1 = 0.25
-        c2 = 0.75
+        c2 = 0.5
 
         days_elapsed = model.get_days_elapsed()
         if random.random() < gust_prob:
