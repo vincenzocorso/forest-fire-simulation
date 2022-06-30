@@ -26,7 +26,7 @@ class OurRule(PropagationRule):
             return cell.state
 
         # Compute the wind component
-        cell.wind_component = WindFactorCalculator.compute_wind_factor(self.model, cell)
+        cell.wind_component = WindFactorCalculator.compute_wind_factor(self.model, cell, self.model.c1, self.model.c2)
 
         spread_reduction = 1 - cell.rain_deficit
 
